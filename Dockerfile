@@ -15,9 +15,9 @@ RUN apt-get update && apt-get install -y \
     nano
 
 # Install Composer
+ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer --version
-ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
 
 
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
