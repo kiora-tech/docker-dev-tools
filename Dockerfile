@@ -39,6 +39,7 @@ ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
 COPY init.sh /init.sh
+RUN chmod +x /init.sh
 
 VOLUME /root/.ssh
 EXPOSE 22
