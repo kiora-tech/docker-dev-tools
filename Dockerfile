@@ -1,10 +1,10 @@
-FROM kiora/php:7.2
+FROM kiora/php:7.3
 ARG YARN_VERSION=1.12.3
 ARG GULP_VERSION=2.0.1
 ARG NODE_VERSION=8
 ARG SCSS_LINT=0.57.1
 
-MAINTAINER Stéphane Rathgeber <srathgeber@manymore.fr>
+MAINTAINER Stéphane Rathgeber <stephane.kiora@gmail.com>
 
 RUN apt-get update && apt-get install -y \
     openssl\
@@ -19,8 +19,8 @@ RUN apt-get update && apt-get install -y \
 
 # Install Composer
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer --version
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+  && composer --version
 
 
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
