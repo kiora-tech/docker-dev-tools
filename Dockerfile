@@ -9,13 +9,13 @@ MAINTAINER Stéphane Rathgeber <stephane.kiora@gmail.com>
 RUN apt-get update && apt-get install -y \
     openssl\
     git\
-    zsh\
     bash-completion\
     vim \
-    openssh-server\
     nano\
     curl \
-    ruby-full
+    ruby-full \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install Composer
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
@@ -28,18 +28,12 @@ RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
   && curl -L https://www.npmjs.com/install.sh | sh
 
 RUN npm install --global yarn@${YARN_VERSION} \
-  && npm install --global gulp-cli@${GULP_VERSION}
+  && npm install --global gulp-cli@${GULP_VERSION} \
+  && npm install --global webpack
 
 #install scss_lint
 RUN gem install scss_lint -v ${SCSS_LINT}
 
-#oh-my-zsh
-RUN sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
-RUN mkdir /var/run/sshd \
-&& echo 'root:passwd' | chpasswd \
-&& sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
-&& sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
@@ -47,7 +41,15 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 COPY init.sh /init.sh
 RUN chmod +x /init.sh
 
-VOLUME /root/.ssh
-EXPOSE 22
+RUN groupadd -g 1000 -r kiora \
+ && useradd -u 1000 -r -g kiora kiora \
+ && mkdir -p /home/kiora/.ssh \
+ && chown -R kiora:kiora /home/kiora \
+ && chown -R kiora:kiora /var/www
+
+USER kiora
+
+VOLUME /home/kiora/.ssh
 WORKDIR /var/www
+ENTRYPOINT ["/bin/bash"]
 CMD ["/init.sh"]
