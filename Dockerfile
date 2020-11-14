@@ -1,9 +1,10 @@
 FROM kiora/php:latest
+
 ARG YARN_VERSION=1.16.0
 ARG NODE_VERSION=12
 ARG SCSS_LINT=0.57.1
 
-MAINTAINER Stéphane Rathgeber <stephane.kiora@gmail.com>
+LABEL maintainer="stephane.kiora@gmail.com"
 
 RUN apt-get update && apt-get install -y \
     openssl\
