@@ -1,7 +1,6 @@
-FROM kiora/php:7.4
-ARG YARN_VERSION=1.12.3
-ARG GULP_VERSION=2.0.1
-ARG NODE_VERSION=8
+FROM kiora/php:latest
+ARG YARN_VERSION=1.16.0
+ARG NODE_VERSION=12
 ARG SCSS_LINT=0.57.1
 
 MAINTAINER Stéphane Rathgeber <stephane.kiora@gmail.com>
@@ -28,7 +27,6 @@ RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
   && curl -L https://www.npmjs.com/install.sh | sh
 
 RUN npm install --global yarn@${YARN_VERSION} \
-  && npm install --global gulp-cli@${GULP_VERSION} \
   && npm install --global webpack
 
 #install scss_lint
