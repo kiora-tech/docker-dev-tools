@@ -4,7 +4,7 @@ ARG YARN_VERSION=1.16.0
 ARG NODE_VERSION=12
 ARG SCSS_LINT=0.57.1
 
-LABEL maintainer="stephane.kiora@gmail.com"
+LABEL maintainer="stephane@kiora.tech"
 
 RUN apt-get update && apt-get install -y \
     openssl\
@@ -37,9 +37,6 @@ RUN gem install scss_lint -v ${SCSS_LINT}
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
-COPY init.sh /init.sh
-RUN chmod +x /init.sh
-
 RUN groupadd -g 1000 -r kiora \
  && useradd -u 1000 -r -g kiora kiora \
  && mkdir -p /home/kiora/.ssh \
@@ -50,5 +47,3 @@ USER kiora
 
 VOLUME /home/kiora/.ssh
 WORKDIR /var/www
-ENTRYPOINT ["/bin/bash"]
-CMD ["/init.sh"]
